@@ -1,4 +1,178 @@
-NOTE - done with AI tools for training purposes. Text generated with AI
+# Network Monitor + IDS - PowerShell Network Security Tool
+
+## How to Run This Program
+
+### Required Software
+
+| Software | Purpose | Download |
+|----------|---------|----------|
+| **PowerShell 5.1+** | Script execution | Built into Windows 10/11 |
+| **Nmap** | Network scanning | [nmap.org](https://nmap.org/download.html) |
+| **Windows OS** | Compatible OS | Windows 7, 8, 10, 11, Server 2012+ |
+
+### Step 1: Install Nmap
+
+Download and install Nmap from https://nmap.org/download.html
+
+**Default installation paths (script checks both):**
+- `C:\Program Files (x86)\Nmap\nmap.exe`
+- `C:\Program Files\Nmap\nmap.exe`
+
+> ⚠️ **Important:** The script requires Nmap. Without it, the program will exit with an error.
+
+### Step 2: Enable PowerShell Execution
+
+By default, Windows blocks PowerShell scripts for security. You must allow execution:
+
+#### Method A: Run Once (Recommended for testing)
+```powershell
+powershell -ExecutionPolicy Bypass -File "C:\path\to\MonitorRetea7.ps1"
+```
+
+#### Method B: Change Policy for Current User (Persistent)
+```powershell
+# Open PowerShell as Administrator and run:
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+#### Method C: Change Policy for All Users (Requires Admin)
+```powershell
+# Open PowerShell as Administrator and run:
+Set-ExecutionPolicy RemoteSigned
+```
+
+**Execution Policy Options:**
+| Policy | Description |
+|--------|-------------|
+| `Restricted` | Default - No scripts allowed ❌ |
+| `RemoteSigned` | Local scripts allowed, remote must be signed ✅ |
+| `Unrestricted` | All scripts allowed (less secure) |
+| `Bypass` | No restrictions (for one-time runs) |
+
+### Step 3: Configure the Script (Optional but Recommended)
+
+Edit the script file with Notepad or any text editor. Change these lines to match YOUR network:
+
+**Line 35 - Change to your network subnet:**
+```powershell
+$subnet = "192.168.1.0/24"   # ← CHANGE THIS to match your network
+```
+
+**How to find your subnet:**
+1. Open Command Prompt or PowerShell
+2. Type: `ipconfig`
+3. Look for your active network adapter's IPv4 address
+4. Use the first three numbers with `.0/24`
+
+Example:
+- Your IP: `192.168.1.105`
+- Your subnet: `192.168.1.0/24`
+
+### Step 4: Run the Script
+
+#### Method 1: Double-Click (After setting ExecutionPolicy)
+1. Save the script as `MonitorRetea7.ps1`
+2. Right-click the file
+3. Select **"Run with PowerShell"**
+
+#### Method 2: From PowerShell Console
+```powershell
+# Navigate to script folder
+cd C:\path\to\script
+
+# Run the script
+.\MonitorRetea7.ps1
+```
+
+#### Method 3: With Custom Parameters (Override config)
+```powershell
+# Custom scan interval (60 seconds)
+.\MonitorRetea7.ps1 60
+
+# Custom subnet (120 second interval, different subnet)
+.\MonitorRetea7.ps1 120 192.168.1.0/24
+```
+
+#### Method 4: Run as Administrator (Recommended for full features)
+```powershell
+# Right-click PowerShell → Run as Administrator
+cd C:\path\to\script
+.\MonitorRetea7.ps1
+```
+
+> 🔑 **Administrator privileges** allow the script to read the full ARP table for accurate MAC address detection. Without admin, some MAC addresses may show as "unknown."
+
+### Step 5: Using the Menu
+
+After running, you'll see:
+
+```
+========================================================
+    NETWORK MONITOR + IDS  -  ADVANCED v2.0
+========================================================
+  Subnet  : 192.168.0.0/24
+  Log dir : C:\NetworkMonitor
+  Mode    : balanced
+  User    : DOMAIN\Username  [COMPUTERNAME]
+  Session : a1b2c3d4
+  Online  : 0 / 0   Threats(HIGH): 0
+========================================================
+
+  [1] Start monitoring
+  [2] Host statistics table
+  [3] Network activity graph + uptime + threats
+  [4] Live dashboard (auto-refresh)
+  [5] Threat / IDS report
+  [6] IP details + IDS events
+  [7] Last alerts
+  [8] MAC address cache
+  [9] Known devices registry
+  [A] Execution audit log
+  [0] Exit
+
+  Choose option:
+```
+
+**Typical first-time workflow:**
+1. Press `1` to start monitoring
+2. Wait for initial scan (30-60 seconds)
+3. Press `CTRL+C` to stop monitoring and return to menu
+4. Explore options `2`, `3`, `4`, `5` to see collected data
+
+### Step 6: Stop the Script
+
+- **During monitoring:** Press `CTRL+C`
+- **At menu:** Press `0` and Enter
+- **Close window:** Click X or type `exit`
+
+## First Run Checklist
+
+- [ ] Nmap installed (`C:\Program Files\Nmap\nmap.exe`)
+- [ ] PowerShell execution policy set (`RemoteSigned`)
+- [ ] Subnet configured correctly (run `ipconfig` to verify)
+- [ ] Run as Administrator (recommended)
+- [ ] Log directory created automatically (`C:\NetworkMonitor`)
+
+## Common Errors & Solutions
+
+| Error | Solution |
+|-------|----------|
+| `ERROR: Nmap not found!` | Install Nmap or update path in script |
+| `File cannot be loaded because running scripts is disabled` | Run `Set-ExecutionPolicy RemoteSigned -Scope CurrentUser` |
+| `Access denied` | Right-click PowerShell → Run as Administrator |
+| `ERROR: Invalid subnet format` | Use format like `192.168.1.0/24` |
+| `No hosts found` | Check your subnet matches `ipconfig` output |
+| `MAC: unknown` | Run as Administrator for full ARP access |
+
+## Quick Start One-Liner
+
+Open PowerShell as Administrator and run:
+```powershell
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force; C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -File "C:\path\to\MonitorRetea7.ps1"
+```
+
+---
+
 # Network Monitor + IDS - PowerShell Network Security Tool
 
 ## Description
